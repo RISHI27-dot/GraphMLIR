@@ -70,6 +70,37 @@ public:
 private:
   int64_t stride;
 };
+
+class GraphDijkstraLowering : public OpRewritePattern<graph::BFSOp> {
+public:
+  using OpRewritePattern<graph::DjikstraOp>::OpRewritePattern;
+
+  explicit GraphDijkstraLowering(MLIRContext *context, int64_t strideParam)
+      : OpRewritePattern(context) {
+    stride = strideParam;
+  }
+
+  LogicalResult matchAndRewrite(graph::DijkstraOp op,
+                                PatternRewriter &rewriter) const override {
+    auto loc = op->getLoc();
+    auto ctx = op->getContext();
+
+    // Create constant indices.
+    Value c0 = rewriter.create<ConstantIndexOp>(loc, 0);
+    Value c1 = rewriter.create<ConstantIndexOp>(loc, 1);
+
+    // Register operand values.
+    Value m1 = op->getOperand(0);
+    Value m2 = op->getOperand(1);
+    Value m3 = op->getOperand(2);
+
+    rewriter.eraseOp(op);
+    return success();
+  }
+
+private:
+  int64_t stride;
+};
 } // end anonymous namespace
 
 void populateLowerGraphConversionPatterns(RewritePatternSet &patterns,

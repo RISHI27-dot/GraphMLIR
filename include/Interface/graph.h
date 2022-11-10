@@ -49,12 +49,23 @@ extern "C" {
 void _mlir_ciface_bfs(MemRef<float, 2> graph1, MemRef<float, 2> graph2,
                       MemRef<float, 2> graph3);
 }
+
+extern "C" {
+void _mlir_ciface_dijkstra(MemRef<float, 2> graph1, MemRef<float, 2> graph2,
+                      MemRef<float, 2> graph3);
+}
 } // namespace detail
 
 void graph_bfs(MemRef<float, 2> graph1, MemRef<float, 2> graph2,
                MemRef<float, 2> graph3) {
   detail::_mlir_ciface_bfs(graph1, graph2, graph3);
 }
+
+void graph_djikstra(MemRef<float, 2> graph1, MemRef<float, 2> graph2,
+               MemRef<float, 2> graph3) {
+  detail::_mlir_ciface_djikstra(graph1, graph2, graph3);
+}
+
 } // namespace graph
 
 #endif
